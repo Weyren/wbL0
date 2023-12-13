@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Viewer</title>
+</head>
+<body>
+
+<input type="text" id="orderUidInput" placeholder="Enter Order UID">
+<button onclick="getOrder()">Get Order</button>
+
+<div id="orderDetails"></div>
+
+<script>
+    function getOrder() {
+        const orderUidInput = document.getElementById('orderUidInput');
+        const orderUid = orderUidInput.value;
+
+        if (!orderUid) {
+            alert('Please enter Order UID');
+            return;
+        }
+
+        fetch('/order', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: `order_uid=${orderUid}`,
+        })
+            .then(response => response.json())
+            .then(data => {
+                const orderDetailsDiv = document.getElementById('orderDetails');
+                orderDetailsDiv.innerHTML = JSON.stringify(data, null, 2);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    }
+</script>
+
+</body>
+</html>
